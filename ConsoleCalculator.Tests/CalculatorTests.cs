@@ -29,6 +29,7 @@ namespace ConsoleCalculator.Tests
         [InlineData("10*(5-2)", 30)]
         [InlineData("(2+3)-(4+3)", -2)]
         [InlineData("(2+3)-(4+(3*(2-3)))", 4)]
+        [InlineData("(2+3)*(6-8)", -10)]
         public void SimpleTests(string e, double r)
         {
             IList<Token> tokensList = Parser.Parse(e, Operator.OperatorsDict.Keys);

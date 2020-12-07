@@ -24,10 +24,23 @@ namespace ConsoleCalculator
                 {
                     break;
                 }
-                IList<Token> tokensList = Parser.Parse(expression, Operator.OperatorsDict.Keys);
 
-                double result = calculator.Compute(tokensList);
-                Console.WriteLine($"Result: {result}");
+                try
+                {
+                    IList<Token> tokensList = Parser.Parse(expression, Operator.OperatorsDict.Keys);
+
+                    double result = calculator.Compute(tokensList);
+                    Console.WriteLine($"Result: {result}");
+                }
+                catch (DivideByZeroException)
+                {
+                    Console.WriteLine("Zero division error occured!");
+                }
+                catch (InvalidSyntaxException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
             }
             Console.WriteLine("Goodbye!");
         }

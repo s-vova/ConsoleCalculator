@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ConsoleCalculator
 {
+    // Класс хранящий делегат оператора и приоритет оператора
     public class Operator
     {
         public Func<double, double, double> Do;

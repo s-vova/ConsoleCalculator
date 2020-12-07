@@ -24,7 +24,7 @@ namespace ConsoleCalculator
 
             return Calculate(Tokens.Pop());
         }
-
+        // Рекурсивно обрабатывает выражение слева направо, токены хранятся в стэке Tokens. 
         double Calculate(Token leftValue)
         {
             if (leftValue.Type == "(")
@@ -36,11 +36,11 @@ namespace ConsoleCalculator
                 }
                 else
                 {
-                    throw new InvalidSyntaxException("Invalid Syntax");
+                    throw new InvalidSyntaxException();
                 }
                 if (!Tokens.TryPop(out _))
                 {
-                    throw new InvalidSyntaxException("\")\" not found");
+                    throw new InvalidSyntaxException("Syntax error \")\" not found");
                 }
             }
 
@@ -54,14 +54,14 @@ namespace ConsoleCalculator
             op = Tokens.Pop();
             if (op.IsNumber)
             {
-                throw new InvalidSyntaxException("Invalid syntax");
+                throw new InvalidSyntaxException();
             }
 
             Token rightValue;
             if (!Tokens.TryPop(out rightValue))
             {
-                // если есть оператор op (см выше) но нет операнда rval значит синтаксическая ошибка 
-                throw new InvalidSyntaxException($"SyntaxError after operator \"{op.Type}\" must be operand!");
+                // если есть оператор op но нет операнда rightValue значит синтаксическая ошибка 
+                throw new InvalidSyntaxException();
             }
 
             if (rightValue.Type == "(")
@@ -70,13 +70,13 @@ namespace ConsoleCalculator
                 rightValue.Type = Token.NUMBER_TOKEN;
                 if (!Tokens.TryPop(out _))
                 {
-                    throw new InvalidSyntaxException("\")\" not found");
+                    throw new InvalidSyntaxException("Syntax error \")\" not found");
                 }
             }
 
             if (!rightValue.IsNumber)
             {
-                throw new InvalidSyntaxException("Invalid syntax");
+                throw new InvalidSyntaxException();
             }
 
             // PeekOp - это следующий оператор
@@ -85,7 +85,7 @@ namespace ConsoleCalculator
             {
                 if (peekOp.IsNumber)
                 {
-                    throw new InvalidSyntaxException("Invalid Syntax");
+                    throw new InvalidSyntaxException();
                 }
                 if (Operators[peekOp.Type].Priority > Operators[op.Type].Priority)
                 {

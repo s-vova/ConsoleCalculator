@@ -9,6 +9,7 @@ namespace ConsoleCalculator.Tests
     {
         static readonly string[] OPERATORS_LIST = { "+", "-", "*", "/", "(", ")" };
         
+        // TokensJoin - вспомагательная функция, которая склеивает токены обратно в строку, чтобы было удобно писать тесты
         string TokensJoin(IList<Token> tokens)
         {
             StringBuilder result = new StringBuilder();
