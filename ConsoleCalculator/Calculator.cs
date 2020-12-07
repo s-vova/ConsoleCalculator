@@ -24,7 +24,7 @@ namespace ConsoleCalculator
 
             return Calculate(Tokens.Pop());
         }
-        // Рекурсивно обрабатывает выражение слева направо, токены хранятся в стэке Tokens. 
+        // Рекурсивно обрабатывает выражение слева направо, токены хранятся в стэке Tokens. На верху стэка хранится левый токен
         double Calculate(Token leftValue)
         {
             if (leftValue.Type == "(")
