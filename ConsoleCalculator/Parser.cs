@@ -44,7 +44,7 @@ namespace ConsoleCalculator
 
                 else
                 {
-                    throw new Exception($"Invalid symbol \"{expression[i]}\" in {i} position");
+                    throw new InvalidSyntaxException($"Invalid symbol \"{expression[i]}\" in {i} position");
                 }
             }
             return result;

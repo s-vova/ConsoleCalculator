@@ -42,7 +42,7 @@ namespace ConsoleCalculator.Tests
         [InlineData("1+2-3+q")]
         public void ParserInvalidSymbol(string s)
         {
-            Assert.Throws<Exception>(() => {Parser.Parse(s, OPERATORS_LIST); });
+            Assert.Throws<InvalidSyntaxException>(() => {Parser.Parse(s, OPERATORS_LIST); });
         }
     }
 }
