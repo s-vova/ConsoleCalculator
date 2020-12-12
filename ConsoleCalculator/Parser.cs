@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Linq;
+using ConsoleCalculator.Domain;
 
 namespace ConsoleCalculator
 {

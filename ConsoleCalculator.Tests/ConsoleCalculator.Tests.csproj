@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ConsoleCalculator.Domain\ConsoleCalculator.Domain.csproj" />
     <ProjectReference Include="..\ConsoleCalculator\ConsoleCalculator.csproj" />
   </ItemGroup>
 

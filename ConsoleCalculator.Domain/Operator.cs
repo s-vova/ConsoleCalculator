@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleCalculator
+namespace ConsoleCalculator.Domain
 {
     // Класс хранящий делегат оператора и приоритет оператора
     public class Operator

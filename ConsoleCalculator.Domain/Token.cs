@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleCalculator
+namespace ConsoleCalculator.Domain
 {
     public class Token
     {
