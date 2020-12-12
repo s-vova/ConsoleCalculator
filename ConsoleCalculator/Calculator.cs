@@ -27,6 +27,12 @@ namespace ConsoleCalculator
         // Рекурсивно обрабатывает выражение слева направо, токены хранятся в стэке Tokens. На верху стэка хранится левый токен
         double Calculate(Token leftValue)
         {
+            if (leftValue.Type == "-")
+            {
+                Tokens.Push(leftValue);
+                leftValue = new Token(0);
+            }
+
             if (leftValue.Type == "(")
             {
                 if (Tokens.TryPop(out Token t))

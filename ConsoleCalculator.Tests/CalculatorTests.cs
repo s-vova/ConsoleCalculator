@@ -30,6 +30,12 @@ namespace ConsoleCalculator.Tests
         [InlineData("(2+3)-(4+3)", -2)]
         [InlineData("(2+3)-(4+(3*(2-3)))", 4)]
         [InlineData("(2+3)*(6-8)", -10)]
+        [InlineData("-5+5", 0)]
+        [InlineData("-(5+5)", -10)]
+        [InlineData("(-5)*5", -25)]
+        [InlineData("5*(-5)", -25)]
+        [InlineData("(-2)*(-3)", 6)]
+        [InlineData("-(-(2-3))", -1)]
         public void SimpleTests(string e, double r)
         {
             IList<Token> tokensList = Parser.Parse(e, Operator.OperatorsDict.Keys);
@@ -44,6 +50,9 @@ namespace ConsoleCalculator.Tests
         [InlineData("1+5+5 1")]
         [InlineData("1+5*(2+3")]
         [InlineData("1+5*(2+3+(5*)")]
+        [InlineData("--5")]
+        [InlineData("(3+3)--(2-3)")]
+        [InlineData("-3*-2")]
         public void ShoudldThrowInvalidSyntax(string e)
         {
             Calculator calculator = new Calculator(Operator.OperatorsDict);
