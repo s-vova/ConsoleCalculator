@@ -7,6 +7,17 @@ namespace ConsoleCalculator.Tests
 {
     public class CalculatorTests
     {
+        // Словарь, в котором задается: оператор, функция которую он выполняет, и его приоритет
+        static readonly Dictionary<string, Operator> OperatorsDict = new Dictionary<string, Operator>
+        {
+            { "+", new Operator((a,b) => a+b, priority : 1) },
+            { "-", new Operator((a,b) => a-b, priority : 1) },
+            { "*", new Operator((a,b) => a*b, priority : 2) },
+            { "/", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a/b, priority : 2) },
+            { "(", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
+            { ")", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
+        };
+
         [Theory]
         [InlineData("1+1", 2)]
         [InlineData("1+2", 3)]
@@ -38,8 +49,8 @@ namespace ConsoleCalculator.Tests
         [InlineData("-(-(2-3))", -1)]
         public void SimpleTests(string e, double r)
         {
-            IList<Token> tokensList = Parser.Parse(e, Operator.OperatorsDict.Keys);
-            Calculator calculator = new Calculator(Operator.OperatorsDict);
+            IList<Token> tokensList = Parser.Parse(e,OperatorsDict.Keys);
+            Calculator calculator = new Calculator(OperatorsDict);
             Assert.Equal(r, calculator.Compute(tokensList));
         }
 
@@ -55,8 +66,8 @@ namespace ConsoleCalculator.Tests
         [InlineData("-3*-2")]
         public void ShoudldThrowInvalidSyntax(string e)
         {
-            Calculator calculator = new Calculator(Operator.OperatorsDict);
-            Assert.Throws<InvalidSyntaxException>(() => calculator.Compute(Parser.Parse(e, Operator.OperatorsDict.Keys)));
+            Calculator calculator = new Calculator(OperatorsDict);
+            Assert.Throws<InvalidSyntaxException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys)));
         }
 
         [Theory]
@@ -65,8 +76,8 @@ namespace ConsoleCalculator.Tests
         [InlineData("5/(2*0)")]
         public void ShouldThrowZeroDivision(string e)
         {
-            Calculator calculator = new Calculator(Operator.OperatorsDict);
-            Assert.Throws<DivideByZeroException>(() => calculator.Compute(Parser.Parse(e, Operator.OperatorsDict.Keys)));
+            Calculator calculator = new Calculator(OperatorsDict);
+            Assert.Throws<DivideByZeroException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys)));
         }
     }
 }
