@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ConsoleCalculator.Domain
 {
-    // Класс хранящий делегат оператора и приоритет оператора
+    // Представляет математический оператор как функцию и приоритет
     public class Operator
     {
         public Func<double, double, double> Do;

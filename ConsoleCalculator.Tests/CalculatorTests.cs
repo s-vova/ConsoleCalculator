@@ -15,8 +15,6 @@ namespace ConsoleCalculator.Tests
             { "-", new Operator((a,b) => a-b, priority : 1) },
             { "*", new Operator((a,b) => a*b, priority : 2) },
             { "/", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a/b, priority : 2) },
-            { "(", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
-            { ")", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
         };
 
         [Theory]
