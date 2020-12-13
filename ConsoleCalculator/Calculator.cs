@@ -8,7 +8,7 @@ namespace ConsoleCalculator
     public class Calculator
     {
         Stack<Token> Tokens = new Stack<Token>();
-        IDictionary<string, Operator> Operators;
+        readonly IDictionary<string, Operator> Operators;
 
         public Calculator(IDictionary<string, Operator> operators)
         {
@@ -38,8 +38,7 @@ namespace ConsoleCalculator
             {
                 if (Tokens.TryPop(out Token t))
                 {
-                    leftValue.Type = Token.NUMBER_TOKEN;
-                    leftValue.Value = Calculate(t);
+                    leftValue = new Token(Calculate(t));
                 }
                 else
                 {
@@ -73,8 +72,7 @@ namespace ConsoleCalculator
 
             if (rightValue.Type == "(")
             {
-                rightValue.Value = Calculate(Tokens.Pop());
-                rightValue.Type = Token.NUMBER_TOKEN;
+                rightValue = new Token(Calculate(Tokens.Pop()));
                 if (!Tokens.TryPop(out _))
                 {
                     throw new InvalidSyntaxException("Syntax error \")\" not found");
@@ -96,7 +94,7 @@ namespace ConsoleCalculator
                 }
                 if (Operators[peekOp.Type].Priority > Operators[op.Type].Priority)
                 {
-                    rightValue.Value = Calculate(rightValue);
+                    rightValue = new Token(Calculate(rightValue));
                 }
             }
 

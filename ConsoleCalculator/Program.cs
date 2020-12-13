@@ -7,20 +7,23 @@ namespace ConsoleCalculator
 {
     class Program
     {
-        // Словарь, в котором задается: оператор, функция которую он выполняет, и его приоритет
-        static readonly Dictionary<string, Operator> OperatorsDict = new Dictionary<string, Operator>
-        {
-            { "+", new Operator((a,b) => a+b, priority : 1) },
-            { "-", new Operator((a,b) => a-b, priority : 1) },
-            { "*", new Operator((a,b) => a*b, priority : 2) },
-            { "/", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a/b, priority : 2) },
-            { "(", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
-            { ")", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
-            //{ "^", new Operator((a,b) => Math.Pow(a,b), priority : 3) }, // Пример добавления новго оператора
-            //{ "%", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a%b, priority : 2) },  // Пример добавления нового оператора
-        };
         static void Main()
         {
+            // Словарь, в котором задается: оператор, функция которую он выполняет, и его приоритет
+            Dictionary<string, Operator> OperatorsDict = new Dictionary<string, Operator>
+            {
+                { "+", new Operator((a,b) => a+b, priority : 1) },
+                { "-", new Operator((a,b) => a-b, priority : 1) },
+                { "*", new Operator((a,b) => a*b, priority : 2) },
+                { "/", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a/b, priority : 2) },
+                { "(", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
+                { ")", new Operator((a,b) => throw new Exception("Shouldn't be called"), priority : 10) },
+                // Пример добавления новго оператора, обратите внимание, что приоритет возведения в степень выше, чем у * и / , но ниже чем у скобок
+                // { "^", new Operator((a,b) => Math.Pow(a,b), priority : 3) }, 
+                // Пример добавления нового оператора
+                // { "%", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a%b, priority : 2) },  
+            };
+
             Console.WriteLine("Welcome to Calculator");
             Console.WriteLine($"Allowed operators: {string.Join(" ", OperatorsDict.Keys)}");
             Console.WriteLine("To close the program, enter empty string");

@@ -11,13 +11,13 @@ namespace ConsoleCalculator.Domain
         public string Type;
         public double Value;
 
-        public Token(string t, double v = 0)
+        public Token(string type, double value = 0)
         {
-            Type = t;
-            Value = v;
+            Type = type;
+            Value = value;
         }
 
-        public Token(double v) : this(Token.NUMBER_TOKEN, v)
+        public Token(double value) : this(Token.NUMBER_TOKEN, value)
         {
         }
 

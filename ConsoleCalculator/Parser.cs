@@ -38,7 +38,7 @@ namespace ConsoleCalculator
                     continue;
                 }
 
-                else if (operatorsList.Contains(expression[i].ToString()) || expression[i] == '(' || expression[i] == ')')
+                else if (operatorsList.Contains(expression[i].ToString()))
                 {
                     result.Add(new Token(expression[i].ToString()));
                 }
