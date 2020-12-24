@@ -7,16 +7,16 @@ namespace ConsoleCalculator
 {
     public class Calculator
     {
-        Stack<Token> Tokens = new Stack<Token>();
-        readonly IDictionary<string, Operator> Operators;
+        private Stack<Token> Tokens = new Stack<Token>();
+        private IDictionary<string, Operator> Operators;
 
-        public Calculator(IDictionary<string, Operator> operators)
+        public Calculator()
         {
-            Operators = operators;
         }
 
-        public double Compute(IList<Token> tokensList)
+        public double Compute(IList<Token> tokensList, IDictionary<string, Operator> operators)
         {
+            Operators = operators;
             Tokens.Clear();
             for (int i = tokensList.Count - 1; i >= 0; i--)
             {

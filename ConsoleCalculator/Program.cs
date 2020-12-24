@@ -27,7 +27,7 @@ namespace ConsoleCalculator
             Console.WriteLine("To close the program, enter empty string");
             Console.WriteLine();
 
-            Calculator calculator = new Calculator(OperatorsDict);
+            Calculator calculator = new Calculator();
 
             while (true)
             {
@@ -43,7 +43,7 @@ namespace ConsoleCalculator
                 {
                     IList<Token> tokensList = Parser.Parse(expression, OperatorsDict.Keys);
 
-                    double result = calculator.Compute(tokensList);
+                    double result = calculator.Compute(tokensList, OperatorsDict);
                     Console.WriteLine($"Result: {result}");
                 }
                 catch (DivideByZeroException)

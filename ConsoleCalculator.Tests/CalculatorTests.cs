@@ -49,8 +49,8 @@ namespace ConsoleCalculator.Tests
         public void SimpleTests(string e, double r)
         {
             IList<Token> tokensList = Parser.Parse(e,OperatorsDict.Keys);
-            Calculator calculator = new Calculator(OperatorsDict);
-            Assert.Equal(r, calculator.Compute(tokensList));
+            Calculator calculator = new Calculator();
+            Assert.Equal(r, calculator.Compute(tokensList, OperatorsDict));
         }
 
         [Theory]
@@ -65,8 +65,8 @@ namespace ConsoleCalculator.Tests
         [InlineData("-3*-2")]
         public void ShoudldThrowInvalidSyntax(string e)
         {
-            Calculator calculator = new Calculator(OperatorsDict);
-            Assert.Throws<InvalidSyntaxException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys)));
+            Calculator calculator = new Calculator();
+            Assert.Throws<InvalidSyntaxException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys), OperatorsDict));
         }
 
         [Theory]
@@ -75,8 +75,8 @@ namespace ConsoleCalculator.Tests
         [InlineData("5/(2*0)")]
         public void ShouldThrowZeroDivision(string e)
         {
-            Calculator calculator = new Calculator(OperatorsDict);
-            Assert.Throws<DivideByZeroException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys)));
+            Calculator calculator = new Calculator();
+            Assert.Throws<DivideByZeroException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys), OperatorsDict));
         }
     }
 }
