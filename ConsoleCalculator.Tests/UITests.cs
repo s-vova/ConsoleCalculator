@@ -12,7 +12,7 @@ namespace ConsoleCalculator.Tests
 {
     public class UITests
     {
-        // Этот тест сделан асинхронным, потому что в xUnit есть баг, 
+        // Эти тесты сделаны асинхронными, потому что в xUnit есть баг, 
         // из-за которого Timeout работает только если метод асинхронный 
         // ссылка https://github.com/xunit/xunit/issues/217#issuecomment-625402054
         // таймаут нужен потому что есть вероятность попадания в бесконечный цикл
@@ -47,6 +47,35 @@ namespace ConsoleCalculator.Tests
                 Assert.Contains("Result: 4", stringOut.ToString());
             });
            
+        }
+
+        [Fact(Timeout = 1000)]
+        public async Task UIPrintsErrors()
+        {
+            await Task.Run(() =>
+            {
+                string expressions =
+                   "1 +\n" +
+                   "\n";
+                StringReader stringIn = new StringReader(expressions);
+
+                StringWriter stringOut = new StringWriter();
+                StringWriter stringOutErr = new StringWriter();
+
+                var mock = new Mock<ISolver>();
+                mock
+                    .Setup(m => m.Solve(It.Is<string>(s => s == "1 +")))
+                    .Throws(new InvalidSyntaxException());
+
+                UI ui = new UI(stringOut, stringIn, stringOutErr);
+
+                // Act
+                ui.Run(mock.Object);
+
+                // Assert
+                Assert.Contains("Syntax error", stringOutErr.ToString());
+                Assert.Contains("Goodbye", stringOut.ToString());
+            });
         }
     }
 }

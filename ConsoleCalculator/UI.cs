@@ -35,9 +35,20 @@ namespace ConsoleCalculator
                 {
                     break;
                 }
+                try
+                {
+                    double result = solver.Solve(expression);
+                    Out.WriteLine($"Result: {result}");
+                }
+                catch (DivideByZeroException)
+                {
+                    OutErr.WriteLine("Zero division error occured!");
+                }
+                catch (InvalidSyntaxException ex)
+                {
+                    OutErr.WriteLine(ex.Message);
+                }
 
-                double result = solver.Solve(expression);
-                Out.WriteLine($"Result: {result}");
             }
             Out.WriteLine("Goodbye!");
         }
