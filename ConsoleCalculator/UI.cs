@@ -20,9 +20,13 @@ namespace ConsoleCalculator
             this.OutErr = OutErr;
         }
 
-        public void Run(ISolver solver)
+        public void Run(ISolver solver, IEnumerable<string> allowedOperators = null)
         {
             Out.WriteLine("Welcome to Calculator");
+            if (allowedOperators != null)
+            {
+                Out.WriteLine($"Allowed operators: {string.Join(", ", allowedOperators)}");
+            }
             Out.WriteLine("To close the program, enter empty string");
             Out.WriteLine();
 

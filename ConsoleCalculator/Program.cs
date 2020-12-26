@@ -13,7 +13,7 @@ namespace ConsoleCalculator
             Solver solver = new Solver(calculator, Parser.Parse);
             UI ui = new UI(Console.Out, Console.In, Console.Error);
 
-            ui.Run(solver);
+            ui.Run(solver, solver.AllowedOperators);
         }
     }
 }
