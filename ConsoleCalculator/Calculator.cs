@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using ConsoleCalculator.Domain;
+using ConsoleCalculator.Interfaces;
 
 namespace ConsoleCalculator
 {
-    public class Calculator
+    public class Calculator : ICalculator
     {
         private Stack<Token> Tokens = new Stack<Token>();
         private IDictionary<string, Operator> Operators;
