@@ -17,66 +17,268 @@ namespace ConsoleCalculator.Tests
             { "/", new Operator((a,b) => b==0 ? throw new DivideByZeroException() : a/b, priority : 2) },
         };
 
-        [Theory]
-        [InlineData("1+1", 2)]
-        [InlineData("1+2", 3)]
-        [InlineData("2*5.1", 10.2)]
-        [InlineData("2/5", 0.4)]
-        [InlineData("1+1+1", 3)]
-        [InlineData("3-2-1", 0)]
-        [InlineData("10+2*5*2*5*3*7", 2110)]
-        [InlineData("5,5/2*24,21-5+3", 64.5775)]
-        [InlineData("5,5/2+3", 5.75)]
-        [InlineData("50/5/2", 5)]
-        [InlineData("2*2*3", 12)]
-        [InlineData("2*2+3", 7)]
-        [InlineData("1-2-3", -4)]
-        [InlineData("10-3-6", 1)]
-        [InlineData("3-2+2", 3)]
-        [InlineData("1+2+3", 6)]
-        [InlineData("(1-2)-6", -7)]
-        [InlineData("10-(5-2)", 7)]
-        [InlineData("10*(5-2)", 30)]
-        [InlineData("(2+3)-(4+3)", -2)]
-        [InlineData("(2+3)-(4+(3*(2-3)))", 4)]
-        [InlineData("(2+3)*(6-8)", -10)]
-        [InlineData("-5+5", 0)]
-        [InlineData("-(5+5)", -10)]
-        [InlineData("(-5)*5", -25)]
-        [InlineData("5*(-5)", -25)]
-        [InlineData("(-2)*(-3)", 6)]
-        [InlineData("-(-(2-3))", -1)]
-        public void SimpleTests(string e, double r)
+        private void RunTest(double expectedResult, IList<Token> tokens)
         {
-            IList<Token> tokensList = Parser.Parse(e,OperatorsDict.Keys);
             Calculator calculator = new Calculator();
-            Assert.Equal(r, calculator.Compute(tokensList, OperatorsDict));
+
+            double actualResult = calculator.Compute(tokens, OperatorsDict);
+
+            Assert.Equal(expectedResult, actualResult);
         }
 
         [Theory]
-        [InlineData("1+a")]
-        [InlineData("1+5+")]
-        [InlineData("1+5+5*")]
-        [InlineData("1+5+5 1")]
-        [InlineData("1+5*(2+3")]
-        [InlineData("1+5*(2+3+(5*)")]
-        [InlineData("--5")]
-        [InlineData("(3+3)--(2-3)")]
-        [InlineData("-3*-2")]
-        public void ShoudldThrowInvalidSyntax(string e)
+        [MemberData(nameof(CanCalculateSimpleExpressionsData))]
+        public void CanCalculateSimpleExpressions(double expectedResult, Token[] tokens)
         {
-            Calculator calculator = new Calculator();
-            Assert.Throws<InvalidSyntaxException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys), OperatorsDict));
+            RunTest(expectedResult, tokens);
         }
 
+        public static IEnumerable<object[]> CanCalculateSimpleExpressionsData =>
+            new List<object[]>
+            {
+                new object[]
+                {
+                    1d + 1d,
+                    new Token[]
+                    {
+                        new Token(1),
+                        new Token("+"),
+                        new Token(1),
+                    }
+                },
+                new object[]
+                {
+                    5d - 2d * 3d,
+                    new Token[]
+                    {
+                        new Token(5),
+                        new Token("-"),
+                        new Token(2),
+                        new Token("*"),
+                        new Token(3),
+                    }
+                },
+                new object[]
+                {
+                    5d * 2d - 3d / 2d,
+                    new Token[]
+                    {
+                        new Token(5),
+                        new Token("*"),
+                        new Token(2),
+                        new Token("-"),
+                        new Token(3),
+                        new Token("/"),
+                        new Token(2),
+                    }
+                },
+                new object[]
+                {
+                    5d + 2d * 3d - 2d,
+                    new Token[]
+                    {
+                        new Token(5),
+                        new Token("+"),
+                        new Token(2),
+                        new Token("*"),
+                        new Token(3),
+                        new Token("-"),
+                        new Token(2),
+                    }
+                },
+                new object[]
+                {
+                    5d - 2d * 3d * 7d,
+                    new Token[]
+                    {
+                        new Token(5),
+                        new Token("-"),
+                        new Token(2),
+                        new Token("*"),
+                        new Token(3),
+                        new Token("*"),
+                        new Token(7),
+                    }
+                },
+                new object[]
+                {
+                    -10d - 2.5d * 3d * -75d,
+                    new Token[]
+                    {
+                        new Token(-10),
+                        new Token("-"),
+                        new Token(2.5),
+                        new Token("*"),
+                        new Token(3),
+                        new Token("*"),
+                        new Token(-75),
+                    }
+                },
+            };
+
         [Theory]
-        [InlineData("5/0")]
-        [InlineData("5/(2-2)")]
-        [InlineData("5/(2*0)")]
-        public void ShouldThrowZeroDivision(string e)
+        [MemberData(nameof(CanCalculateSimpleExpressionsData))]
+        public void CanCalculateWithBrackets(double exptectedResult, Token[] tokens)
+        {
+            RunTest(exptectedResult, tokens);
+        }
+
+        public static IEnumerable<object[]> CanCalculateWithBracketsData =>
+            new List<object[]>
+            {
+                new object[]
+                {
+                    2d * (4d - 5d),
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("*"),
+                        new Token("("),
+                        new Token(4),
+                        new Token("-"),
+                        new Token(5),
+                        new Token(")"),
+                    }
+                },
+                new object[]
+                {
+                    2d * (4d * 5d),
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("*"),
+                        new Token("("),
+                        new Token(4),
+                        new Token("*"),
+                        new Token(5),
+                        new Token(")"),
+                    }
+                },
+                new object[]
+                {
+                    (2d - 3d) * (5d + 12d),
+                    new Token[]
+                    {
+                        new Token("("),
+                        new Token(2),
+                        new Token("-"),
+                        new Token(3),
+                        new Token(")"),
+                        new Token("*"),
+                        new Token("("),
+                        new Token(5),
+                        new Token("+"),
+                        new Token(12),
+                        new Token(")"),
+                    }
+                },
+                new object[]
+                {
+                    -(-(2d-3d)),
+                    new Token[]
+                    {
+                        new Token("-"),
+                        new Token("("),
+                        new Token("-"),
+                        new Token("("),
+                        new Token(2),
+                        new Token("-"),
+                        new Token(3),
+                        new Token(")"),
+                        new Token(")"),                        
+                    }
+                },
+            };
+    
+        [Theory]
+        [MemberData(nameof(ThrowsInvalidSyntaxData))]
+        public void ThrowsInvalidSyntax(Token[] tokens)
         {
             Calculator calculator = new Calculator();
-            Assert.Throws<DivideByZeroException>(() => calculator.Compute(Parser.Parse(e, OperatorsDict.Keys), OperatorsDict));
+
+            Assert.Throws<InvalidSyntaxException>(()=> 
+            { 
+                calculator.Compute(tokens, OperatorsDict); 
+            });
         }
+
+        public static IEnumerable<object[]> ThrowsInvalidSyntaxData =>
+           new List<object[]>
+           {
+                new object[]
+                {
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("*"),
+                    },
+                },
+                new object[]
+                {
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("*"),
+                        new Token(2),
+                        new Token("+"),
+                    },
+                },
+                new object[]
+                {
+                    new Token[]
+                    {
+                        new Token("-"),
+                        new Token("("),
+                        new Token("("),
+                        new Token("-"),
+                        new Token("("),
+                        new Token(2),
+                        new Token("-"),
+                        new Token(3),
+                        new Token(")"),
+                        new Token(")"),
+                    },
+                }
+           };
+
+        [Theory]
+        [MemberData(nameof(ThrowsZeroDivisionErrorData))]
+        public void ThrowsZeroDivisionError(Token[] tokens)
+        {
+            Calculator calculator = new Calculator();
+
+            Assert.Throws<DivideByZeroException>(() =>
+            {
+                calculator.Compute(tokens, OperatorsDict);
+            });
+        }
+
+        public static IEnumerable<object[]> ThrowsZeroDivisionErrorData =>
+           new List<object[]>
+           {
+                new object[]
+                {
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("/"),
+                        new Token(0),
+                    },
+                },
+                new object[]
+                {
+                    new Token[]
+                    {
+                        new Token(2),
+                        new Token("/"),
+                        new Token("("),
+                        new Token(5),
+                        new Token("-"),
+                        new Token(5),
+                        new Token(")"),
+                    },
+                },
+
+           };
     }
 }
